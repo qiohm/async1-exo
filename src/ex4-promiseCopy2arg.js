@@ -13,17 +13,25 @@ import { COPYFILE_EXCL } from 'constants'
 const src = process.argv[2]
 const dest = process.argv[3]
 
+try {
+    let stats = await fsPromises.stat(src)
+    if (stats.isFile()) {
+        await fsPromises.copyFile(src, dest)
+        console.log('source.txt was copied to destination.txt')
+    }
+} catch (e) {
+    console.log(e)
+}
+
+/* if (process.argv.length !== 4) {
+    console.log('USAGE: node ex4-promiseCopy2arg.js src dest')
+    process.exit(1)
+}
+
 fsPromises
-    .copyFile(`../${src}`, `../${dest}`, COPYFILE_EXCL)
+    .copyFile(src, dest, COPYFILE_EXCL)
 
     .then(() => console.log('source.txt was copied to destination.txt'))
-    .catch(() => console.log('The file could not be copied'))
+    .catch(() => console.log('The file could not be copied')) */
 
-if (process.argv.length !== 4) {
-    console.log('USAGE: node ex4-promiseCopy2arg.js src dest')
-}
-if (!isNaN(src) || !isNaN(dest)) {
-    console.log('Error : src <string> dest <string>')
-}
-
-// node ex4-promiseCopy2arg.js file1.txt file5.txt
+// node ex4-promiseCopy2arg.js ../file1.txt ../file5.txt
